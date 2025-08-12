@@ -15,6 +15,12 @@ class GeoLocationHandler:
             Dictionary containing location information or None if failed
         """
         try:
+            # Validate coordinates
+            lat, lon = coordinates
+            if not (-90 <= lat <= 90) or not (-180 <= lon <= 180):
+                self.logger.warning(f"Invalid coordinates: {coordinates}")
+                return None
+                
             result = reverse_geocoder.search([coordinates])[0]
             return {
                 'city': result['name'],

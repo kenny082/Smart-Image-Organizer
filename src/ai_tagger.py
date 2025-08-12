@@ -4,6 +4,7 @@ from typing import List, Optional
 import torch
 import logging
 from pathlib import Path
+import datetime
 
 class AITagger:
     def __init__(self, model_name: str = "openai/clip-vit-base-patch32"):
