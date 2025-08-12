@@ -1,0 +1,19 @@
+from setuptools import setup, find_packages
+
+setup(
+    name="smart-image-organizer",
+    version="0.1.0",
+    packages=find_packages(),
+    install_requires=[
+        "Pillow>=10.0.0",
+        "exifread>=3.0.0",
+        "typer>=0.9.0",
+        "reverse-geocoder>=1.5.1",
+        "transformers>=4.31.0",
+        "torch>=2.0.1",
+        "rich>=13.5.2",
+        "tqdm>=4.65.0",
+        "python-dotenv>=1.0.0",
+    ],
+    python_requires=">=3.8",
+)
