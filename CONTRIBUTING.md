@@ -16,12 +16,20 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. Install development dependencies:
+3. Install development dependencies and set up pre-commit hooks:
 ```bash
 pip install -r requirements.txt
 pip install -r dev-requirements.txt
 pip install -e .
+pre-commit install
 ```
+
+This will set up pre-commit hooks that run automatically on `git commit` to:
+- Format code with black
+- Sort imports with isort
+- Check types with mypy
+- Lint with flake8 (including docstring checks)
+- Check for common issues (trailing whitespace, large files, etc.)
 
 ## Development Tools
 
