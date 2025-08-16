@@ -1,36 +1,107 @@
+"""
+ExifHandler module for extracting and processing EXIF metadata from images.
+
+This module provides functionality to:
+- Extract EXIF metadata from image files
+- Parse date information
+- Extract and convert GPS coordinates
+- Get camera information
+
+Example:
+    handler = ExifHandler()
+    exif_data = handler.get_exif_data(image_path)
+    date = handler.get_date_taken(exif_data)
+    coords = handler.get_gps_coordinates(exif_data)
+    camera_info = handler.get_camera_info(exif_data)
+"""
+
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Union
 import logging
+from datetime import datetime
 
 class ExifHandler:
+    """
+    A class to handle EXIF metadata extraction and processing from images.
+    
+    This class provides methods to extract and process various types of EXIF metadata
+    including dates, GPS coordinates, and camera information.
+    """
+    
     def __init__(self):
+        """Initialize the ExifHandler with a configured logger."""
         self.logger = logging.getLogger(__name__)
 
     def get_exif_data(self, image_path: Path) -> Dict:
-        """Extract EXIF data from an image file."""
+        """
+        Extract EXIF data from an image file.
+
+        Args:
+            image_path (Path): Path to the image file.
+
+        Returns:
+            Dict: Dictionary containing EXIF data. Empty if no EXIF data found or on error.
+                 Keys are EXIF tag names, values are the corresponding EXIF values.
+
+        Examples:
+            >>> handler = ExifHandler()
+            >>> exif_data = handler.get_exif_data(Path("image.jpg"))
+            >>> print(exif_data.get("Make"))  # Get camera manufacturer
+            'SONY'
+        """
+        if not isinstance(image_path, Path):
+            image_path = Path(image_path)
+
+        if not image_path.exists():
+            self.logger.error(f"Image file does not exist: {image_path}")
+            return {}
+
+        if not image_path.is_file():
+            self.logger.error(f"Path is not a file: {image_path}")
+            return {}
+
         try:
             with Image.open(image_path) as img:
+                # Check if image format supports EXIF
+                if img.format not in ('JPEG', 'TIFF', 'HEIC'):
+                    self.logger.warning(f"Image format {img.format} may not support EXIF data")
+
                 exif = img._getexif()
                 if not exif:
+                    self.logger.debug(f"No EXIF data found in {image_path}")
                     return {}
                 
                 exif_data = {}
                 for tag_id, value in exif.items():
-                    tag = TAGS.get(tag_id, tag_id)
-                    exif_data[tag] = value
+                    try:
+                        tag = TAGS.get(tag_id, tag_id)
+                        # Handle binary data
+                        if isinstance(value, bytes):
+                            continue
+                        exif_data[tag] = value
+                    except Exception as e:
+                        self.logger.debug(f"Error processing EXIF tag {tag_id}: {str(e)}")
+                        continue
 
                 # Extract GPS info if available
                 if "GPSInfo" in exif_data:
-                    gps_data = {}
-                    for tag_id, value in exif_data["GPSInfo"].items():
-                        tag = GPSTAGS.get(tag_id, tag_id)
-                        gps_data[tag] = value
-                    exif_data["GPSInfo"] = gps_data
+                    try:
+                        gps_data = {}
+                        for tag_id, value in exif_data["GPSInfo"].items():
+                            tag = GPSTAGS.get(tag_id, tag_id)
+                            gps_data[tag] = value
+                        exif_data["GPSInfo"] = gps_data
+                    except Exception as e:
+                        self.logger.warning(f"Error processing GPS data: {str(e)}")
+                        exif_data.pop("GPSInfo", None)
 
                 return exif_data
 
+        except Image.UnidentifiedImageError:
+            self.logger.error(f"Cannot identify image file: {image_path}")
+            return {}
         except Exception as e:
             self.logger.warning(f"Failed to extract EXIF from {image_path}: {str(e)}")
             return {}
