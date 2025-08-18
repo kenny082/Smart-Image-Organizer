@@ -1,9 +1,6 @@
 import pytest
-from pathlib import Path
 from src.exif_handler import ExifHandler
 from PIL import Image
-from PIL.ExifTags import TAGS, GPSTAGS
-import os
 import piexif
 from datetime import datetime
 

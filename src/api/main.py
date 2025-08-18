@@ -3,12 +3,10 @@ Main API module for the Image Metadata service.
 Implements endpoints for metadata extraction and organization.
 """
 
-from fastapi import FastAPI, UploadFile, File, HTTPException, Depends, Header
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
-from typing import Dict, Optional, List
-import json
-import os
+from typing import Dict
 from datetime import datetime
 import uvicorn
 from ..exif_handler import ExifHandler

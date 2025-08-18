@@ -4,7 +4,6 @@ Implements rate limiting using a sliding window counter.
 """
 
 from fastapi import HTTPException
-from datetime import datetime
 from collections import defaultdict
 import time
 import os
@@ -53,7 +52,7 @@ class RateLimiter:
         if len(self.requests[client_id]) >= self.requests_per_minute:
             raise HTTPException(
                 status_code=429,
-                detail=f"Rate limit exceeded. Maximum {self.requests_per_minute} requests per minute.",
+                detail=f"Rate limit exceeded. Max {self.requests_per_minute} requests/minute.",
             )
 
         self.requests[client_id].append(now)

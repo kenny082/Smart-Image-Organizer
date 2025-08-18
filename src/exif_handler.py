@@ -18,9 +18,8 @@ Example:
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from pathlib import Path
-from typing import Dict, Optional, Tuple, Union
+from typing import Dict, Optional, Tuple
 import logging
-from datetime import datetime
 
 
 class ExifHandler:

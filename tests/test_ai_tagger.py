@@ -2,7 +2,6 @@ import pytest
 from pathlib import Path
 from src.ai_tagger import AITagger
 from PIL import Image
-import torch
 
 
 @pytest.fixture
@@ -29,8 +28,7 @@ def test_ai_tagger_initialization(ai_tagger):
 def test_generate_tags(ai_tagger, sample_image, monkeypatch):
     """Test tag generation for a sample image"""
     # Mock the model output
-    import torch
-
+    
     mock_probs = torch.tensor(
         [[0.6, 0.3, 0.8]]
     )  # Mock probabilities above threshold for first 3 categories

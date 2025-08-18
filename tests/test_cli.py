@@ -1,5 +1,4 @@
 import pytest
-from pathlib import Path
 from typer.testing import CliRunner
 from src.cli import app, CLIError
 from PIL import Image
