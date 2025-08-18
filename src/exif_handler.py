@@ -22,14 +22,15 @@ from typing import Dict, Optional, Tuple, Union
 import logging
 from datetime import datetime
 
+
 class ExifHandler:
     """
     A class to handle EXIF metadata extraction and processing from images.
-    
+
     This class provides methods to extract and process various types of EXIF metadata
     including dates, GPS coordinates, and camera information.
     """
-    
+
     def __init__(self):
         """Initialize the ExifHandler with a configured logger."""
         self.logger = logging.getLogger(__name__)
@@ -65,14 +66,16 @@ class ExifHandler:
         try:
             with Image.open(image_path) as img:
                 # Check if image format supports EXIF
-                if img.format not in ('JPEG', 'TIFF', 'HEIC'):
-                    self.logger.warning(f"Image format {img.format} may not support EXIF data")
+                if img.format not in ("JPEG", "TIFF", "HEIC"):
+                    self.logger.warning(
+                        f"Image format {img.format} may not support EXIF data"
+                    )
 
                 exif = img._getexif()
                 if not exif:
                     self.logger.debug(f"No EXIF data found in {image_path}")
                     return {}
-                
+
                 exif_data = {}
                 for tag_id, value in exif.items():
                     try:
@@ -82,11 +85,13 @@ class ExifHandler:
                             continue
                         exif_data[tag] = value
                     except Exception as e:
-                        self.logger.debug(f"Error processing EXIF tag {tag_id}: {str(e)}")
+                        self.logger.debug(
+                            f"Error processing EXIF tag {tag_id}: {str(e)}"
+                        )
                         continue
 
                 # Extract GPS info if available
-                if "GPSInfo" in exif_data:                                                                                                                                  
+                if "GPSInfo" in exif_data:
                     try:
                         gps_data = {}
                         for tag_id, value in exif_data["GPSInfo"].items():
@@ -109,7 +114,7 @@ class ExifHandler:
     def get_date_taken(self, exif_data: Dict) -> Optional[str]:
         """Extract the date taken from EXIF data."""
         date_fields = ["DateTimeOriginal", "DateTimeDigitized", "DateTime"]
-        
+
         for field in date_fields:
             if field in exif_data:
                 return exif_data[field]
@@ -122,18 +127,18 @@ class ExifHandler:
                 return None
 
             gps_info = exif_data["GPSInfo"]
-            
+
             if "GPSLatitude" in gps_info and "GPSLongitude" in gps_info:
                 lat = self._convert_to_degrees(gps_info["GPSLatitude"])
                 lon = self._convert_to_degrees(gps_info["GPSLongitude"])
-                
+
                 if gps_info["GPSLatitudeRef"] == "S":
                     lat = -lat
                 if gps_info["GPSLongitudeRef"] == "W":
                     lon = -lon
-                    
+
                 return (lat, lon)
-                
+
         except Exception as e:
             self.logger.warning(f"Failed to extract GPS coordinates: {str(e)}")
         return None
@@ -152,11 +157,11 @@ class ExifHandler:
             "LensModel": "lens",
             "FNumber": "f_number",
             "ExposureTime": "exposure",
-            "ISOSpeedRatings": "iso"
+            "ISOSpeedRatings": "iso",
         }
-        
+
         for exif_field, info_field in camera_fields.items():
             if exif_field in exif_data:
                 camera_info[info_field] = str(exif_data[exif_field])
-        
+
         return camera_info
