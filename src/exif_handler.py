@@ -86,7 +86,7 @@ class ExifHandler:
                         continue
 
                 # Extract GPS info if available
-                if "GPSInfo" in exif_data:
+                if "GPSInfo" in exif_data:                                                                                                                                  
                     try:
                         gps_data = {}
                         for tag_id, value in exif_data["GPSInfo"].items():
