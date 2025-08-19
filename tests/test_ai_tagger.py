@@ -2,6 +2,7 @@ import pytest
 from pathlib import Path
 from src.ai_tagger import AITagger
 from PIL import Image
+import torch  # Required for mock tensor
 
 
 @pytest.fixture

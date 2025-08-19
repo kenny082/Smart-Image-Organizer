@@ -1,6 +1,6 @@
 import pytest
 from typer.testing import CliRunner
-from src.cli import app, CLIError
+from src.cli import app
 from PIL import Image
 import json
 
