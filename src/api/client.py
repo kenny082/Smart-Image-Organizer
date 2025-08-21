@@ -31,6 +31,8 @@ class ImageMetadataClient:
 
     def _get_headers(self) -> Dict[str, str]:
         """Get request headers."""
+        if self.api_key is None:
+            raise ValueError("API key is not set")
         return {"X-API-Key": self.api_key}
 
     def extract_metadata(self, image_path: Path) -> Dict[str, Any]:
@@ -54,7 +56,8 @@ class ImageMetadataClient:
                 files=files,
             )
             response.raise_for_status()
-            return response.json()
+            result: Dict[str, Any] = response.json()
+            return result
 
     def check_health(self) -> Dict[str, Any]:
         """
