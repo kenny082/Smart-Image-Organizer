@@ -64,23 +64,25 @@ class ImageMetadataClient:
         Check if the API is healthy.
 
         Returns:
-            Dict: Health check response
+            Dict[str, Any]: Health check response
         """
         response = requests.get(
             f"{self.base_url}/api/v1/health", headers=self._get_headers()
         )
         response.raise_for_status()
-        return response.json()
+        result: Dict[str, Any] = response.json()
+        return result
 
     def get_rate_limit(self) -> Dict[str, Any]:
         """
         Get current rate limit status.
 
         Returns:
-            Dict: Rate limit information
+            Dict[str, Any]: Rate limit information
         """
         response = requests.get(
             f"{self.base_url}/api/v1/rate-limit", headers=self._get_headers()
         )
         response.raise_for_status()
-        return response.json()
+        result: Dict[str, Any] = response.json()
+        return result

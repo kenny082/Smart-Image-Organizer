@@ -51,11 +51,11 @@ class ExifHandler:
             >>> print(exif_data.get("Make"))  # Get camera manufacturer
             'SONY'
         """
-        if not isinstance(image_path, Path):
-            image_path = Path(image_path)
+        # Ensure we're working with a Path object
+        path = Path(image_path) if isinstance(image_path, str) else image_path  # type: ignore[unreachable]
 
-        if not image_path.exists():
-            self.logger.error(f"Image file does not exist: {image_path}")
+        if not path.exists():
+            self.logger.error(f"Image file does not exist: {path}")
             return {}
 
         if not image_path.is_file():
@@ -110,13 +110,14 @@ class ExifHandler:
             self.logger.warning(f"Failed to extract EXIF from {image_path}: {str(e)}")
             return {}
 
-    def get_date_taken(self, exif_data: Dict) -> Optional[str]:
+    def get_date_taken(self, exif_data: Dict[str, Any]) -> Optional[str]:
         """Extract the date taken from EXIF data."""
         date_fields = ["DateTimeOriginal", "DateTimeDigitized", "DateTime"]
 
         for field in date_fields:
             if field in exif_data:
-                return exif_data[field]
+                value = exif_data[field]
+                return str(value) if value is not None else None
         return None
 
     def get_gps_coordinates(self, exif_data: Dict) -> Optional[Tuple[float, float]]:
@@ -142,10 +143,10 @@ class ExifHandler:
             self.logger.warning(f"Failed to extract GPS coordinates: {str(e)}")
         return None
 
-    def _convert_to_degrees(self, value: Tuple) -> float:
+    def _convert_to_degrees(self, value: Tuple[float, float, float]) -> float:
         """Helper function to convert GPS coordinates to degrees."""
         d, m, s = value
-        return d + (m / 60.0) + (s / 3600.0)
+        return float(d + (m / 60.0) + (s / 3600.0))
 
     def get_camera_info(self, exif_data: Dict) -> Dict[str, str]:
         """Extract camera information from EXIF data."""

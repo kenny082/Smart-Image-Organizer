@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union, Any
 import shutil
 import json
 import logging
@@ -17,7 +17,7 @@ class FileOrganizer:
         self.geo_handler = GeoLocationHandler()
         self.ai_tagger = AITagger() if use_ai else None
         self.logger = logging.getLogger(__name__)
-        self.operations_log: List[Dict[str, Optional[str]]] = []
+        self.operations_log: List[Dict[str, Optional[Union[str, List[str]]]]] = []
 
     def scan_images(self) -> List[Path]:
         """Scan source directory for image files."""
@@ -64,7 +64,7 @@ class FileOrganizer:
 
                 if not dry_run:
                     self._move_file(image_path, new_path)
-                    if tags:
+                    if tags and self.ai_tagger is not None:
                         self.ai_tagger.save_tags(new_path, tags)
 
                 self.operations_log.append(
@@ -145,8 +145,11 @@ class FileOrganizer:
         """Undo the last batch of file operations."""
         for operation in reversed(self.operations_log):
             try:
-                source = Path(operation["destination"])
-                dest = Path(operation["source"])
+                dest_str = operation["destination"]
+                src_str = operation["source"]
+                if isinstance(dest_str, str) and isinstance(src_str, str):
+                    source = Path(dest_str)
+                    dest = Path(src_str)
 
                 if source.exists():
                     dest.parent.mkdir(parents=True, exist_ok=True)
