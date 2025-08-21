@@ -11,16 +11,23 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
-exclude = "tests/"
 
 [[tool.mypy.overrides]]
 module = [
     "transformers.*",
     "PIL.*",
     "torch.*",
-    "reverse_geocoder.*"
+    "reverse_geocoder.*",
+    "pytest.*",
+    "piexif.*"
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disable_error_code = ["no-untyped-def", "no-untyped-call"]
+check_untyped_defs = false
+disallow_untyped_defs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
