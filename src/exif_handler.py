@@ -55,7 +55,9 @@ class ExifHandler:
         path = Path(image_path) if isinstance(image_path, str) else image_path  # type: ignore[unreachable]
 
         if not path.exists():
-            self.logger.error(f"Image file does not exist: {path}")
+            self.logger.error(
+                "Image file does not exist or is invalid: " f"{image_path}"
+            )
             return {}
 
         if not image_path.is_file():
