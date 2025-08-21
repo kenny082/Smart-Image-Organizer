@@ -184,7 +184,9 @@ def organize(
 
 
 @app.command()
-def undo(log_file: Path = typer.Argument(..., help="Path to the operations log file")) -> None:
+def undo(
+    log_file: Path = typer.Argument(..., help="Path to the operations log file")
+) -> None:
     """Undo the last organization operation using the operations log."""
     try:
         setup_logging()
