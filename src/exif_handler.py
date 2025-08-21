@@ -52,7 +52,8 @@ class ExifHandler:
             'SONY'
         """
         # Ensure we're working with a Path object
-        path = Path(image_path) if isinstance(image_path, str) else image_path  # type: ignore[unreachable]
+        # Handle both string and Path inputs
+        path = Path(image_path) if isinstance(image_path, str) else image_path
 
         if not path.exists():
             self.logger.error(
