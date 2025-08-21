@@ -17,7 +17,7 @@ class FileOrganizer:
         self.geo_handler = GeoLocationHandler()
         self.ai_tagger = AITagger() if use_ai else None
         self.logger = logging.getLogger(__name__)
-        self.operations_log = []
+        self.operations_log: List[Dict[str, Optional[str]]] = []
 
     def scan_images(self) -> List[Path]:
         """Scan source directory for image files."""
@@ -57,7 +57,7 @@ class FileOrganizer:
 
                 # Generate AI tags if enabled
                 tags = None
-                if self.ai_tagger:
+                if self.ai_tagger is not None:
                     tags = self.ai_tagger.generate_tags(image_path)
                     if tags:
                         stats["tagged"] += 1

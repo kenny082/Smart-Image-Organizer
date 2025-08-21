@@ -4,7 +4,7 @@ Client library for the Image Metadata API.
 
 import requests
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 import os
 from dotenv import load_dotenv
 
@@ -29,11 +29,11 @@ class ImageMetadataClient:
         if not self.api_key:
             raise ValueError("API key is required")
 
-    def _get_headers(self) -> Dict:
+    def _get_headers(self) -> Dict[str, str]:
         """Get request headers."""
         return {"X-API-Key": self.api_key}
 
-    def extract_metadata(self, image_path: Path) -> Dict:
+    def extract_metadata(self, image_path: Path) -> Dict[str, Any]:
         """
         Send an image to the API and get its metadata.
 
@@ -41,7 +41,7 @@ class ImageMetadataClient:
             image_path: Path to the image file
 
         Returns:
-            Dict: Image metadata
+            Dict[str, Any]: Image metadata
 
         Raises:
             requests.exceptions.RequestException: If request fails
@@ -56,7 +56,7 @@ class ImageMetadataClient:
             response.raise_for_status()
             return response.json()
 
-    def check_health(self) -> Dict:
+    def check_health(self) -> Dict[str, Any]:
         """
         Check if the API is healthy.
 
@@ -69,7 +69,7 @@ class ImageMetadataClient:
         response.raise_for_status()
         return response.json()
 
-    def get_rate_limit(self) -> Dict:
+    def get_rate_limit(self) -> Dict[str, Any]:
         """
         Get current rate limit status.
 

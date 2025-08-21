@@ -18,7 +18,7 @@ Example:
 from PIL import Image
 from PIL.ExifTags import TAGS, GPSTAGS
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Any
 import logging
 
 
@@ -30,11 +30,11 @@ class ExifHandler:
     including dates, GPS coordinates, and camera information.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the ExifHandler with a configured logger."""
         self.logger = logging.getLogger(__name__)
 
-    def get_exif_data(self, image_path: Path) -> Dict:
+    def get_exif_data(self, image_path: Path) -> Dict[str, Any]:
         """
         Extract EXIF data from an image file.
 

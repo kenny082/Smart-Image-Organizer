@@ -28,7 +28,7 @@ class CLIError(Exception):
     pass
 
 
-def setup_logging(log_file: str = "image_organizer.log"):
+def setup_logging(log_file: str = "image_organizer.log") -> None:
     """Setup logging with file and console output."""
     logging.basicConfig(
         level=logging.INFO,
@@ -69,7 +69,7 @@ def create_progress() -> Progress:
     )
 
 
-def display_results(stats: Dict, use_ai: bool = False):
+def display_results(stats: Dict[str, int], use_ai: bool = False) -> None:
     """Display organization results in a table."""
     table = Table(title="Organization Results")
     table.add_column("Metric", style="cyan")
@@ -184,7 +184,7 @@ def organize(
 
 
 @app.command()
-def undo(log_file: Path = typer.Argument(..., help="Path to the operations log file")):
+def undo(log_file: Path = typer.Argument(..., help="Path to the operations log file")) -> None:
     """Undo the last organization operation using the operations log."""
     try:
         setup_logging()
@@ -239,5 +239,5 @@ def undo(log_file: Path = typer.Argument(..., help="Path to the operations log f
         raise typer.Exit(1)
 
 
-def main():
+def main() -> None:
     app()

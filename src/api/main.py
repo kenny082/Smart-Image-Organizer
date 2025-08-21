@@ -57,7 +57,7 @@ async def extract_metadata(
     # Check rate limit
     await rate_limiter.check(api_key)
 
-    if not file.content_type.startswith("image/"):
+    if file.content_type is None or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
 
     # Save temporary file
@@ -133,7 +133,7 @@ async def get_rate_limit(api_key: str = Depends(verify_api_key)) -> Dict:
     }
 
 
-def start_api(host: str = "0.0.0.0", port: int = 8000):
+def start_api(host: str = "0.0.0.0", port: int = 8000) -> None:
     """Start the FastAPI server."""
     uvicorn.run(app, host=host, port=port)
 

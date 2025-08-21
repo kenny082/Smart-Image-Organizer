@@ -4,7 +4,7 @@ import logging
 
 
 class GeoLocationHandler:
-    def __init__(self):
+    def __init__(self) -> None:
         self.logger = logging.getLogger(__name__)
 
     def get_location_info(self, coordinates: Tuple[float, float]) -> Optional[Dict]:
