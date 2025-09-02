@@ -59,9 +59,7 @@ class ExifHandler:
             return {}
 
         if not image_path.exists():
-            self.logger.error(
-                f"Image file does not exist: {image_path}"
-            )
+            self.logger.error(f"Image file does not exist: {image_path}")
             return {}
 
         if not image_path.is_file():
