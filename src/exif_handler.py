@@ -51,13 +51,16 @@ class ExifHandler:
             >>> print(exif_data.get("Make"))  # Get camera manufacturer
             'SONY'
         """
-        # Ensure we're working with a Path object
-        # Handle both string and Path inputs
-        path = Path(image_path) if isinstance(image_path, str) else image_path
+        # Convert to Path object if needed
+        try:
+            image_path = Path(str(image_path))
+        except TypeError:
+            self.logger.error(f"Invalid path type: {type(image_path)}")
+            return {}
 
-        if not path.exists():
+        if not image_path.exists():
             self.logger.error(
-                "Image file does not exist or is invalid: " f"{image_path}"
+                f"Image file does not exist: {image_path}"
             )
             return {}
 

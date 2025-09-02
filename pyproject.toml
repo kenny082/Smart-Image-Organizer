@@ -19,7 +19,12 @@ module = [
     "torch.*",
     "reverse_geocoder.*",
     "pytest.*",
-    "piexif.*"
+    "piexif.*",
+    "typer.*",
+    "rich.*",
+    "fastapi.*",
+    "dotenv.*",
+    "uvicorn.*"
 ]
 ignore_missing_imports = true
 

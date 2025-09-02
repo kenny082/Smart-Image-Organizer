@@ -4,7 +4,7 @@ Handles API key verification and JWT token management.
 """
 
 from datetime import datetime, timedelta
-from typing import Dict
+from typing import Dict, Any
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from fastapi import HTTPException, Security
@@ -25,7 +25,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 api_key_header = APIKeyHeader(name="X-API-Key")
 
 
-def create_access_token(data: Dict) -> str:
+def create_access_token(data: Dict[str, Any]) -> str:
     """
     Create a JWT access token.
 
@@ -41,7 +41,7 @@ def create_access_token(data: Dict) -> str:
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def decode_token(token: str) -> Dict:
+def decode_token(token: str) -> Dict[str, Any]:
     """
     Decode and verify a JWT token.
 
