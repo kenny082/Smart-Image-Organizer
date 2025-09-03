@@ -1,10 +1,13 @@
-from transformers import CLIPProcessor, CLIPModel
-from PIL import Image
-from typing import List, Optional
-import torch
-import logging
-from pathlib import Path
 import datetime
+import logging
+import os
+from os import PathLike
+from pathlib import Path
+from typing import List, Optional, Union
+
+import torch
+from PIL import Image
+from transformers import CLIPModel, CLIPProcessor
 
 
 class AITagger:
@@ -20,12 +23,12 @@ class AITagger:
             raise
 
     def generate_tags(
-        self, image_path: Path, confidence_threshold: float = 0.5
+        self, image_path: Union[str, PathLike[str]], confidence_threshold: float = 0.5
     ) -> List[str]:
         """
         Generate tags for an image using the CLIP model.
         Args:
-            image_path: Path to the image file
+            image_path: Path to the image file (can be string or Path)
             confidence_threshold: Minimum confidence score for tags
         Returns:
             List of generated tags
@@ -61,7 +64,7 @@ class AITagger:
             ]
 
             # Load and preprocess the image
-            image = Image.open(image_path)
+            image = Image.open(os.fspath(image_path))
             inputs = self.processor(
                 images=image, text=categories, return_tensors="pt", padding=True
             ).to(self.device)
@@ -85,20 +88,26 @@ class AITagger:
             return []
 
     def save_tags(
-        self, image_path: Path, tags: List[str], output_path: Optional[Path] = None
+        self,
+        image_path: Union[str, PathLike[str]],
+        tags: List[str],
+        output_path: Optional[Union[str, PathLike[str]]] = None,
     ) -> None:
         """
         Save generated tags to a file.
         Args:
-            image_path: Path to the original image
+            image_path: Path to the original image (can be string or Path)
             tags: List of generated tags
             output_path: Optional path to save tags (defaults to image_path with .json extension)
         """
         import json
 
         try:
+            image_path = Path(os.fspath(image_path))
             if output_path is None:
                 output_path = image_path.with_suffix(".json")
+            else:
+                output_path = Path(os.fspath(output_path))
 
             tag_data = {
                 "image_path": str(image_path),

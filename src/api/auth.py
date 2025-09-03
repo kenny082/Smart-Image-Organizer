@@ -1,16 +1,17 @@
-"""
-Authentication module for the API.
+"""Authentication module for the API.
+
 Handles API key verification and JWT token management.
 """
 
+import os
 from datetime import datetime, timedelta
-from typing import Dict, Any
-from jose import JWTError, jwt
-from passlib.context import CryptContext
+from typing import Any, Dict
+
+from dotenv import load_dotenv
 from fastapi import HTTPException, Security
 from fastapi.security import APIKeyHeader
-import os
-from dotenv import load_dotenv
+from jose import JWTError, jwt
+from passlib.context import CryptContext
 
 load_dotenv()
 
@@ -38,7 +39,8 @@ def create_access_token(data: Dict[str, Any]) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
-    return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    token: str = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return token
 
 
 def decode_token(token: str) -> Dict[str, Any]:
@@ -55,7 +57,8 @@ def decode_token(token: str) -> Dict[str, Any]:
         HTTPException: If token is invalid
     """
     try:
-        return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        decoded: Dict[str, Any] = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return decoded
     except JWTError:
         raise HTTPException(status_code=401, detail="Could not validate credentials")
 

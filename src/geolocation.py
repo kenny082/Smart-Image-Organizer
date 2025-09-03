@@ -1,19 +1,35 @@
-import reverse_geocoder
-from typing import Dict, Optional, Tuple
+"""Handle geolocation-related functionality for image metadata.
+
+This module provides functionality for reverse geocoding GPS coordinates and
+formatting location information into human-readable strings.
+"""
+
 import logging
+from typing import Dict, Optional, Tuple
+
+import reverse_geocoder
 
 
 class GeoLocationHandler:
+    """Handle conversion of GPS coordinates to human-readable location information.
+
+    This class provides methods to perform reverse geocoding on GPS coordinates
+    and format the resulting location data into readable strings.
+    """
+
     def __init__(self) -> None:
+        """Initialize the GeoLocationHandler with a configured logger."""
         self.logger = logging.getLogger(__name__)
 
     def get_location_info(self, coordinates: Tuple[float, float]) -> Optional[Dict]:
-        """
-        Get location information from GPS coordinates using reverse geocoding.
+        """Get location information from GPS coordinates using reverse geocoding.
+
         Args:
-            coordinates: Tuple of (latitude, longitude)
+            coordinates: Tuple of (latitude, longitude).
+
         Returns:
-            Dictionary containing location information or None if failed
+            Dictionary containing location information (city, admin1, admin2, country)
+            or None if the lookup fails.
         """
         try:
             # Validate coordinates
@@ -36,7 +52,19 @@ class GeoLocationHandler:
             return None
 
     def format_location_string(self, location_info: Dict) -> str:
-        """Format location information into a readable string."""
+        """Format location information into a readable string.
+
+        Creates a comma-separated string of location components in the order:
+        city, state/province, country.
+
+        Args:
+            location_info: A dictionary containing location information with
+                         city, admin1 (state/province), and country fields.
+
+        Returns:
+            A formatted string containing available location information or
+            'Unknown Location' if no data is available.
+        """
         if not location_info:
             return "Unknown Location"
 

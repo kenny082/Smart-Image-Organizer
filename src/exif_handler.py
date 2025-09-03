@@ -15,11 +15,12 @@ Example:
     camera_info = handler.get_camera_info(exif_data)
 """
 
-from PIL import Image
-from PIL.ExifTags import TAGS, GPSTAGS
-from pathlib import Path
-from typing import Dict, Optional, Tuple, Any
 import logging
+from pathlib import Path
+from typing import Any, Dict, Optional, Tuple
+
+from PIL import Image
+from PIL.ExifTags import GPSTAGS, TAGS
 
 
 class ExifHandler:
@@ -153,7 +154,16 @@ class ExifHandler:
         return float(d + (m / 60.0) + (s / 3600.0))
 
     def get_camera_info(self, exif_data: Dict) -> Dict[str, str]:
-        """Extract camera information from EXIF data."""
+        """Retrieve camera information from EXIF data.
+
+        Extracts camera-related metadata including make, model, lens info, and settings.
+
+        Args:
+            exif_data: A dictionary containing EXIF metadata.
+
+        Returns:
+            A dictionary containing camera information with standardized field names.
+        """
         camera_info = {}
         camera_fields = {
             "Make": "make",

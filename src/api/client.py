@@ -1,11 +1,10 @@
-"""
-Client library for the Image Metadata API.
-"""
+"""Client library for the Image Metadata API."""
+
+import os
+from pathlib import Path
+from typing import Any, Dict, Optional
 
 import requests
-from pathlib import Path
-from typing import Dict, Optional, Any
-import os
 from dotenv import load_dotenv
 
 load_dotenv()

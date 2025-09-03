@@ -1,12 +1,24 @@
-import pytest
-from typer.testing import CliRunner
-from src.cli import app
-from PIL import Image
+"""Test suite for the command-line interface functionality.
+
+This module contains tests for the CLI commands including:
+- Preview functionality for image organization
+- Image organization with and without AI tagging
+- Operation logging and undo capabilities
+- Error handling for various edge cases
+"""
+
 import json
+
+import pytest
+from PIL import Image
+from typer.testing import CliRunner
+
+from src.cli import app
 
 
 @pytest.fixture
 def runner():
+    """Create a CliRunner instance for testing CLI commands."""
     return CliRunner()
 
 

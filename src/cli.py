@@ -1,18 +1,29 @@
-import typer
+"""Command-line interface for the Smart Image Organizer.
+
+This module provides a CLI for organizing images based on metadata and AI tagging.
+It includes commands for:
+- Previewing organization changes
+- Performing the organization with or without AI tagging
+- Undoing previous organization operations
+"""
+
+import logging
 from pathlib import Path
-from typing import Optional, List, Dict
+from typing import Dict, List, Optional
+
+import typer
 from rich.console import Console
+from rich.panel import Panel
 from rich.progress import (
+    BarColumn,
     Progress,
     SpinnerColumn,
-    TextColumn,
-    BarColumn,
     TaskProgressColumn,
+    TextColumn,
     TimeRemainingColumn,
 )
 from rich.table import Table
-from rich.panel import Panel
-import logging
+
 from .file_organizer import FileOrganizer
 
 app = typer.Typer(
@@ -38,7 +49,7 @@ def setup_logging(log_file: str = "image_organizer.log") -> None:
 
 
 def validate_source_dir(source_dir: Path) -> List[Path]:
-    """Validate source directory and return list of image files."""
+    """Check source directory validity and list image files within."""
     if not source_dir.exists():
         raise CLIError(f"Source directory does not exist: {source_dir}")
 
@@ -242,4 +253,5 @@ def undo(
 
 
 def main() -> None:
+    """Entry point for the CLI application."""
     app()

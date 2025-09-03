@@ -1,14 +1,15 @@
-"""
-Rate limiting module for the API.
+"""Rate limiting module for the API.
+
 Implements rate limiting using a sliding window counter.
 """
 
-from fastapi import HTTPException
-from collections import defaultdict
-import time
 import os
+import time
+from collections import defaultdict
 from typing import Dict, List
+
 from dotenv import load_dotenv
+from fastapi import HTTPException
 
 load_dotenv()
 

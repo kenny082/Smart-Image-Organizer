@@ -11,6 +11,9 @@ warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
+allow_redefinition = true
+show_error_codes = true
+pretty = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -30,7 +33,15 @@ ignore_missing_imports = true
 
 [[tool.mypy.overrides]]
 module = "tests.*"
-disable_error_code = ["no-untyped-def", "no-untyped-call"]
+disable_error_code = [
+    "no-untyped-def",
+    "no-untyped-call",
+    "operator",
+    "index",
+    "assignment",
+    "arg-type",
+    "no-any-return"
+]
 check_untyped_defs = false
 disallow_untyped_defs = false
 

@@ -1,14 +1,14 @@
-"""
-Caching module for the API.
+"""Caching module for the API.
+
 Implements metadata caching using LRU cache with file hash as key.
 """
 
-from functools import lru_cache
-from pathlib import Path
 import hashlib
-from typing import Dict, Optional
 import os
 from datetime import datetime, timedelta
+from functools import lru_cache
+from pathlib import Path
+from typing import Dict, Optional
 
 
 class MetadataCache:

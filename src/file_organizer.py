@@ -1,16 +1,44 @@
-from pathlib import Path
-from typing import Dict, List, Optional, Union
-import shutil
+"""File organization module for image management.
+
+This module provides functionality for:
+- Scanning directories for images
+- Organizing images based on metadata
+- Moving files to structured directories
+- Generating and managing operation logs
+- Undoing file operations
+"""
+
 import json
 import logging
+import shutil
 from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Union
+
+from .ai_tagger import AITagger
 from .exif_handler import ExifHandler
 from .geolocation import GeoLocationHandler
-from .ai_tagger import AITagger
 
 
 class FileOrganizer:
+    """Manages the organization of image files based on metadata and AI tagging.
+
+    This class handles the core functionality of image organization, including:
+    - Scanning for image files in a directory
+    - Organizing files based on date and location
+    - Applying AI-based tagging (optional)
+    - Tracking and logging file operations
+    - Supporting undo operations
+    """
+
     def __init__(self, source_dir: Path, dest_dir: Path, use_ai: bool = False):
+        """Initialize the FileOrganizer.
+
+        Args:
+            source_dir: Source directory containing images to organize.
+            dest_dir: Destination directory for organized images.
+            use_ai: Whether to enable AI-powered image tagging.
+        """
         self.source_dir = Path(source_dir)
         self.dest_dir = Path(dest_dir)
         self.exif_handler = ExifHandler()
@@ -29,12 +57,20 @@ class FileOrganizer:
         ]
 
     def organize_images(self, dry_run: bool = True) -> Dict:
-        """
-        Organize images based on their metadata.
+        """Organize images based on their metadata.
+
+        This method processes each image file:
+        1. Extracts EXIF metadata
+        2. Determines destination path based on date and location
+        3. Applies AI tagging if enabled
+        4. Moves files (unless in dry run mode)
+
         Args:
-            dry_run: If True, only simulate the operations
+            dry_run: If True, only simulate the operations.
+
         Returns:
-            Dictionary with operation statistics
+            Dictionary with operation statistics including processed, moved,
+            tagged, and error counts.
         """
         stats = {"processed": 0, "moved": 0, "tagged": 0, "errors": 0}
         self.operations_log = []

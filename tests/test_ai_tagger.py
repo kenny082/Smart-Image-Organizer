@@ -1,12 +1,14 @@
-import pytest
 from pathlib import Path
-from src.ai_tagger import AITagger
-from PIL import Image
+
+import pytest
 import torch  # Required for mock tensor
+from PIL import Image
+
+from src.ai_tagger import AITagger
 
 
 @pytest.fixture
-def sample_image(tmp_path):
+def sample_image(tmp_path: str) -> str:
     # Create a test image
     img_path = tmp_path / "test.jpg"
     img = Image.new("RGB", (224, 224), color="red")
@@ -15,18 +17,20 @@ def sample_image(tmp_path):
 
 
 @pytest.fixture
-def ai_tagger():
+def ai_tagger() -> AITagger:
     return AITagger()
 
 
-def test_ai_tagger_initialization(ai_tagger):
+def test_ai_tagger_initialization(ai_tagger: AITagger) -> None:
     """Test AI Tagger initialization"""
     assert ai_tagger.model is not None
     assert ai_tagger.processor is not None
     assert ai_tagger.device in ["cuda", "cpu"]
 
 
-def test_generate_tags(ai_tagger, sample_image, monkeypatch):
+def test_generate_tags(
+    ai_tagger: AITagger, sample_image: str, monkeypatch: pytest.MonkeyPatch
+) -> None:
     """Test tag generation for a sample image"""
     # Mock the model output
 
@@ -66,7 +70,7 @@ def test_generate_tags(ai_tagger, sample_image, monkeypatch):
     assert tags == ["landscape", "wildlife"]  # Only these have probs > 0.5
 
 
-def test_generate_tags_invalid_image(ai_tagger, tmp_path):
+def test_generate_tags_invalid_image(ai_tagger: AITagger, tmp_path: str) -> None:
     """Test tag generation with invalid image"""
     invalid_path = tmp_path / "nonexistent.jpg"
     tags = ai_tagger.generate_tags(invalid_path)
@@ -74,7 +78,7 @@ def test_generate_tags_invalid_image(ai_tagger, tmp_path):
     assert len(tags) == 0
 
 
-def test_save_tags(ai_tagger, sample_image, tmp_path):
+def test_save_tags(ai_tagger: AITagger, sample_image: str, tmp_path: str) -> None:
     """Test saving tags to a file"""
     tags = ["test_tag1", "test_tag2"]
     output_path = tmp_path / "tags.json"
@@ -82,7 +86,7 @@ def test_save_tags(ai_tagger, sample_image, tmp_path):
     assert output_path.exists()
 
 
-def test_save_tags_default_path(ai_tagger, sample_image):
+def test_save_tags_default_path(ai_tagger: AITagger, sample_image: str) -> None:
     """Test saving tags with default output path"""
     tags = ["test_tag1", "test_tag2"]
     ai_tagger.save_tags(sample_image, tags)
