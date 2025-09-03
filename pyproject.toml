@@ -34,6 +34,29 @@ disable_error_code = ["no-untyped-def", "no-untyped-call"]
 check_untyped_defs = false
 disallow_untyped_defs = false
 
+[build-system]
+requires = ["setuptools>=42"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "smart-image-organizer"
+version = "0.1.0"
+description = "Smart Image Organizer - Automatically organize images using metadata and AI"
+dependencies = [
+    "typer",
+    "rich",
+    "fastapi",
+    "python-dotenv",
+    "uvicorn",
+    "pillow",
+    "requests",
+    "python-jose",
+    "passlib",
+    "types-requests",
+    "types-python-jose",
+    "types-passlib",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]

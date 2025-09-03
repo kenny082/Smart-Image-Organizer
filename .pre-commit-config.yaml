@@ -28,7 +28,11 @@ repos:
   rev: v1.4.1
   hooks:
     - id: mypy
-      additional_dependencies: [types-all]
+      additional_dependencies:
+        - types-requests
+        - types-python-jose
+        - types-passlib
+        - python-dotenv
       args: [--ignore-missing-imports]
 
 - repo: https://github.com/pycqa/isort
