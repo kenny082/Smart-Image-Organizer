@@ -75,11 +75,10 @@ class AITagger:
             probs = logits_per_image.softmax(dim=1)[0]
 
             # Get tags above threshold
-            tags = [
-                category
-                for category, prob in zip(categories, probs)
-                if prob > confidence_threshold
-            ]
+            tags = []
+            for category, prob in zip(categories, probs):
+                if prob > confidence_threshold:
+                    tags.append(category)
 
             return tags
 

@@ -77,7 +77,8 @@ class RateLimiter:
             [req_time for req_time in self.requests[client_id] if req_time > minute_ago]
         )
 
-        return max(0, self.requests_per_minute - current_requests)
+        remaining = self.requests_per_minute - current_requests
+        return max(0, remaining)
 
 
 # Global rate limiter instance

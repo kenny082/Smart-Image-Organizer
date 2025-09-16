@@ -133,7 +133,9 @@ class ExifHandler:
 
             gps_info = exif_data["GPSInfo"]
 
-            if "GPSLatitude" in gps_info and "GPSLongitude" in gps_info:
+            has_lat = "GPSLatitude" in gps_info
+                has_lon = "GPSLongitude" in gps_info
+                if has_lat and has_lon:
                 lat = self._convert_to_degrees(gps_info["GPSLatitude"])
                 lon = self._convert_to_degrees(gps_info["GPSLongitude"])
 
