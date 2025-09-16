@@ -1,4 +1,4 @@
-name: Tests
+git staname: Tests
 
 on:
   push:
@@ -8,32 +8,20 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
+    env:
+      SIO_DISABLE_AI: '1'
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.11'
         cache: 'pip'
 
-    - name: Cache CUDA
-      uses: actions/cache@v3
-      with:
-        path: ~/cuda-cache
-        key: cuda-${{ runner.os }}
-
-    - name: Install CUDA
-      uses: Jimver/cuda-toolkit@v0.2.11
-      id: cuda-toolkit
-      with:
-        cuda: '11.8.0'
-        method: 'network'
-        sub-packages: '["nvcc", "cudart"]'
-
     - name: Cache pip packages
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt', '**/dev-requirements.txt') }}
