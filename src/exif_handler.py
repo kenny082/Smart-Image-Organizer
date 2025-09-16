@@ -36,15 +36,14 @@ class ExifHandler:
         self.logger = logging.getLogger(__name__)
 
     def get_exif_data(self, image_path: Path) -> Dict[str, Any]:
-        """
-        Extract EXIF data from an image file.
+        """Extract EXIF data from an image file.
 
         Args:
             image_path (Path): Path to the image file.
 
         Returns:
-            Dict: Dictionary containing EXIF data. Empty if no EXIF data found or on error.
-                 Keys are EXIF tag names, values are the corresponding EXIF values.
+            Dict: Dictionary containing EXIF data. Empty if no data or error.
+                 Keys are tag names, values are tag values.
 
         Examples:
             >>> handler = ExifHandler()
@@ -134,8 +133,8 @@ class ExifHandler:
             gps_info = exif_data["GPSInfo"]
 
             has_lat = "GPSLatitude" in gps_info
-                has_lon = "GPSLongitude" in gps_info
-                if has_lat and has_lon:
+            has_lon = "GPSLongitude" in gps_info
+            if has_lat and has_lon:
                 lat = self._convert_to_degrees(gps_info["GPSLatitude"])
                 lon = self._convert_to_degrees(gps_info["GPSLongitude"])
 

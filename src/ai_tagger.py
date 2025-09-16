@@ -97,7 +97,7 @@ class AITagger:
         Args:
             image_path: Path to the original image (can be string or Path)
             tags: List of generated tags
-            output_path: Optional path to save tags (defaults to image_path with .json extension)
+            output_path: Optional path for saving tags (defaults to .json)
         """
         import json
 

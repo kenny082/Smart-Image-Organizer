@@ -51,10 +51,8 @@ class RateLimiter:
         ]
 
         if len(self.requests[client_id]) >= self.requests_per_minute:
-            raise HTTPException(
-                status_code=429,
-                detail=f"Rate limit exceeded. Max {self.requests_per_minute} requests/minute.",
-            )
+            msg = f"Rate limit: {self.requests_per_minute} requests/minute."
+            raise HTTPException(status_code=429, detail=msg)
 
         self.requests[client_id].append(now)
         return True
