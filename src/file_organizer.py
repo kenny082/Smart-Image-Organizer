@@ -12,6 +12,7 @@ import json
 import logging
 import shutil
 from datetime import datetime
+import os
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
@@ -43,7 +44,9 @@ class FileOrganizer:
         self.dest_dir = Path(dest_dir)
         self.exif_handler = ExifHandler()
         self.geo_handler = GeoLocationHandler()
-        self.ai_tagger = AITagger() if use_ai else None
+        # Allow disabling AI in CI via env var to avoid heavy downloads or network
+        ai_disabled = os.getenv("SIO_DISABLE_AI") == "1"
+        self.ai_tagger = AITagger() if (use_ai and not ai_disabled) else None
         self.logger = logging.getLogger(__name__)
         self.operations_log: List[Dict[str, Optional[Union[str, List[str]]]]] = []
 
