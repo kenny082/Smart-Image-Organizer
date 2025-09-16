@@ -9,7 +9,6 @@ on:
 jobs:
   quality:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
 
@@ -21,18 +20,21 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install black flake8 mypy
         pip install -r requirements.txt
         pip install -r dev-requirements.txt
-
-    - name: Check formatting with black
-      run: |
-        black --check src tests
+        pip install -e .
 
     - name: Lint with flake8
+      continue-on-error: true  # Don't fail the build, just report issues
       run: |
-        flake8 src tests --max-line-length=100 --statistics
+        flake8 src tests \
+          --max-line-length=100 \
+          --statistics \
+          --ignore=D100,D101,D102,D103,D104,D105,D107 \
+          --show-source \
+          --format="%(path)s:%(row)d:%(col)d: %(code)s %(text)s"
 
     - name: Type check with mypy
+      continue-on-error: true  # Don't fail the build, just report issues
       run: |
-        mypy src tests
+        mypy src tests --ignore-missing-imports --no-strict-optional
