@@ -10,39 +10,39 @@ jobs:
   quality:
     runs-on: ubuntu-22.04
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-        cache: 'pip'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+          cache: 'pip'
 
-    - name: Cache pip packages
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-quality-${{ hashFiles('**/requirements.txt', '**/dev-requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-quality-
+      - name: Cache pip packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-quality-${{ hashFiles('**/requirements.txt', '**/dev-requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-quality-
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -r dev-requirements.txt
-        pip install -e .
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r dev-requirements.txt
+          pip install -e .
 
-    - name: Lint with flake8
-      run: |
-        flake8 src tests \
-          --statistics \
-          --show-source \
-          --format="%(path)s:%(row)d:%(col)d: %(code)s %(text)s" \
-          --extend-ignore=E203 \
-          --max-line-length=88
+      - name: Lint with flake8
+        run: |
+          flake8 src tests \
+            --statistics \
+            --show-source \
+            --format="%(path)s:%(row)d:%(col)d: %(code)s %(text)s" \
+            --extend-ignore=E203 \
+            --max-line-length=88
 
-    - name: Type check with mypy
-      continue-on-error: true  # Don't fail the build, just report issues
-      run: |
-        mypy src tests --ignore-missing-imports --no-strict-optional
+      - name: Type check with mypy
+        continue-on-error: true
+        run: |
+          mypy src tests
