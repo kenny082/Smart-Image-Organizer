@@ -38,7 +38,9 @@ jobs:
         flake8 src tests \
           --statistics \
           --show-source \
-          --format="%(path)s:%(row)d:%(col)d: %(code)s %(text)s"
+          --format="%(path)s:%(row)d:%(col)d: %(code)s %(text)s" \
+          --extend-ignore=E203 \
+          --max-line-length=88
 
     - name: Type check with mypy
       continue-on-error: true  # Don't fail the build, just report issues
