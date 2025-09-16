@@ -53,6 +53,7 @@ build-backend = "setuptools.build_meta"
 name = "smart-image-organizer"
 version = "0.1.0"
 description = "Smart Image Organizer - Automatically organize images using metadata and AI"
+requires-python = ">=3.8"
 dependencies = [
     "typer",
     "rich",
