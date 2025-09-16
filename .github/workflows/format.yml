@@ -34,4 +34,4 @@ jobs:
       run: |
         git config --global user.name 'github-actions'
         git config --global user.email 'github-actions@github.com'
-        git diff --quiet || (git add -A && git commit -m "🎨 Format code with black and isort" && git push)
+        git diff --quiet || (git add -A && git commit -m "Format code with black and isort" && git push)
