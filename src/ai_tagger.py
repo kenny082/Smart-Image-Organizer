@@ -1,10 +1,10 @@
 import datetime
 import logging
 import os
+import sys
 from os import PathLike
 from pathlib import Path
 from typing import List, Optional, Union
-import sys
 
 import torch
 from PIL import Image
