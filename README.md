@@ -109,6 +109,10 @@ destination/
   - transformers: AI image tagging
   - torch: Required for AI tagging
 
+## CI note
+
+- To avoid heavy model downloads and speed up CI, set the environment variable `SIO_DISABLE_AI=1` in your CI environment. This disables AI tagging during tests while keeping the rest of the functionality intact.
+
 ## Contributing
 
 Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for:
