@@ -3,7 +3,8 @@ import logging
 import os
 from os import PathLike
 from pathlib import Path
-from typing import Any, List, Optional, Union
+from typing import List, Optional, Union
+import sys
 
 import torch
 from PIL import Image
@@ -45,7 +46,7 @@ class AITagger:
             self.logger.warning(f"Failed to load AI model: {str(e)}")
 
     def generate_tags(
-        self, image_path: Union[str, PathLike[str]], confidence_threshold: float = 0.5
+        self, image_path: Union[str, PathLike], confidence_threshold: float = 0.5
     ) -> List[str]:
         """
         Generate tags for an image using the CLIP model.
