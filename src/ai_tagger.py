@@ -3,7 +3,7 @@ import logging
 import os
 from os import PathLike
 from pathlib import Path
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 
 import torch
 from PIL import Image
@@ -20,8 +20,8 @@ class AITagger:
         # offline-safe
         # Keep non-None placeholders so tests that assert non-None pass without
         # forcing downloads
-        self.model = object()
-        self.processor = object()
+        self.model: Union[CLIPModel, object] = object()
+        self.processor: Union[CLIPProcessor, object] = object()
         self._is_loaded = False
         self.logger.info(f"AI Tagger initialized (lazy) using {self.device}")
 
