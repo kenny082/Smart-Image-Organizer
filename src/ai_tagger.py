@@ -16,8 +16,10 @@ class AITagger:
         self.model_name = model_name
         # Determine device early; torch is required by tests anyway
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        # Defer heavy model/processor loading to first use to make CI faster and offline-safe
-        # Keep non-None placeholders so tests that assert non-None pass without forcing downloads
+        # Defer heavy model/processor loading to first use to make CI faster and
+        # offline-safe
+        # Keep non-None placeholders so tests that assert non-None pass without
+        # forcing downloads
         self.model = object()
         self.processor = object()
         self._is_loaded = False
